@@ -84,11 +84,25 @@ class CardStack extends React.Component {
 
   _childEventSubscribers = {};
 
-  componentWillReceiveProps(props) {
-    if (props.screenProps !== this.props.screenProps) {
+  // componentWillReceiveProps(props) {
+  //   if (props.screenProps !== this.props.screenProps) {
+  //     this._screenDetails = {};
+  //   }
+  //   props.transitionProps.scenes.forEach(newScene => {
+  //     if (
+  //       this._screenDetails[newScene.key] &&
+  //       this._screenDetails[newScene.key].state !== newScene.route
+  //     ) {
+  //       this._screenDetails[newScene.key] = null;
+  //     }
+  //   });
+  // }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.screenProps !== prevProps.screenProps) {
       this._screenDetails = {};
     }
-    props.transitionProps.scenes.forEach(newScene => {
+    this.props.transitionProps.scenes.forEach(newScene => {
       if (
         this._screenDetails[newScene.key] &&
         this._screenDetails[newScene.key].state !== newScene.route
@@ -96,9 +110,7 @@ class CardStack extends React.Component {
         this._screenDetails[newScene.key] = null;
       }
     });
-  }
 
-  componentDidUpdate() {
     const activeKeys = this.props.transitionProps.navigation.state.routes.map(
       route => route.key
     );

@@ -12,15 +12,17 @@ export default function withCachedChildNavigation(Comp) {
 
     _childEventSubscribers = {};
 
-    componentWillMount() {
+    componentDidMount() {
       this._updateNavigationProps(this.props.navigation);
     }
 
-    componentWillReceiveProps(nextProps) {
-      this._updateNavigationProps(nextProps.navigation);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //   this._updateNavigationProps(nextProps.navigation);
+    // }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
+      this._updateNavigationProps(this.props.navigation);
+
       const activeKeys = this.props.navigation.state.routes.map(
         route => route.key
       );

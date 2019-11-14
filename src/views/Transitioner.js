@@ -39,12 +39,10 @@ class Transitioner extends React.Component {
     this._queuedTransition = null;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._onLayout = this._onLayout.bind(this);
     this._onTransitionEnd = this._onTransitionEnd.bind(this);
-  }
 
-  componentDidMount() {
     this._isMounted = true;
   }
 
@@ -52,11 +50,32 @@ class Transitioner extends React.Component {
     this._isMounted = false;
   }
 
-  componentWillReceiveProps(nextProps) {
+  // componentWillReceiveProps(nextProps) {
+  //   const nextScenes = NavigationScenesReducer(
+  //     this.state.scenes,
+  //     nextProps.navigation.state,
+  //     this.props.navigation.state
+  //   );
+  //
+  //   if (nextScenes === this.state.scenes) {
+  //     return;
+  //   }
+  //
+  //   const indexHasChanged =
+  //     nextProps.navigation.state.index !== this.props.navigation.state.index;
+  //   if (this._isTransitionRunning) {
+  //     this._queuedTransition = { nextProps, nextScenes, indexHasChanged };
+  //     return;
+  //   }
+  //
+  //   this._startTransition(nextProps, nextScenes, indexHasChanged);
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
     const nextScenes = NavigationScenesReducer(
       this.state.scenes,
-      nextProps.navigation.state,
-      this.props.navigation.state
+      this.props.navigation.state,
+      prevProps.navigation.state
     );
 
     if (nextScenes === this.state.scenes) {
@@ -64,13 +83,13 @@ class Transitioner extends React.Component {
     }
 
     const indexHasChanged =
-      nextProps.navigation.state.index !== this.props.navigation.state.index;
+      this.props.navigation.state.index !== prevProps.navigation.state.index;
     if (this._isTransitionRunning) {
-      this._queuedTransition = { nextProps, nextScenes, indexHasChanged };
+      this._queuedTransition = { nextProps: this.props, nextScenes, indexHasChanged };
       return;
     }
 
-    this._startTransition(nextProps, nextScenes, indexHasChanged);
+    this._startTransition(this.props, nextScenes, indexHasChanged);
   }
 
   _startTransition(nextProps, nextScenes, indexHasChanged) {

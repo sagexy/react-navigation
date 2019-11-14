@@ -16,12 +16,10 @@ export default function create(Component) {
       this._pointerEvents = this._computePointerEvents();
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this._onPositionChange = this._onPositionChange.bind(this);
       this._onComponentRef = this._onComponentRef.bind(this);
-    }
 
-    componentDidMount() {
       this._bindPosition(this.props);
     }
 
@@ -29,8 +27,8 @@ export default function create(Component) {
       this._positionListener && this._positionListener.remove();
     }
 
-    componentWillReceiveProps(nextProps) {
-      this._bindPosition(nextProps);
+    componentDidUpdate (prevProps, prevState) {
+      this._bindPosition(this.props);
     }
 
     render() {

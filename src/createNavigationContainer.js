@@ -127,11 +127,12 @@ export default function createNavigationContainer(Component) {
       }
     }
 
-    componentWillReceiveProps(nextProps) {
-      this._validateProps(nextProps);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //   this._validateProps(nextProps);
+    // }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
+      this._validateProps(this.props);
       // Clear cached _nav every tick
       if (this._nav === this.state.nav) {
         this._nav = null;
