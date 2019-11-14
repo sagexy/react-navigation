@@ -12,7 +12,9 @@ export default function withCachedChildNavigation(Comp) {
 
     _childEventSubscribers = {};
 
-    componentDidMount() {
+    constructor(props, context) {
+      super(props, context);
+
       this._updateNavigationProps(this.props.navigation);
     }
 

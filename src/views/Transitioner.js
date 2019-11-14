@@ -37,12 +37,12 @@ class Transitioner extends React.Component {
     this._isMounted = false;
     this._isTransitionRunning = false;
     this._queuedTransition = null;
+
+    this._onLayout = this._onLayout.bind(this);
+    this._onTransitionEnd = this._onTransitionEnd.bind(this);
   }
 
   componentDidMount() {
-    this._onLayout = this._onLayout.bind(this);
-    this._onTransitionEnd = this._onTransitionEnd.bind(this);
-
     this._isMounted = true;
   }
 
