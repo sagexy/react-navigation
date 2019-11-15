@@ -5,6 +5,31 @@ import NavigationActions from './NavigationActions';
 import addNavigationHelpers from './addNavigationHelpers';
 import invariant from './utils/invariant';
 
+function isStateful(props) {
+  return !props.navigation;
+}
+
+function validateProps(props) {
+  if (isStateful(props)) {
+    return;
+  }
+
+  const { navigation, screenProps, ...containerProps } = props;
+
+  const keys = Object.keys(containerProps);
+
+  if (keys.length !== 0) {
+    throw new Error(
+      'This navigator has both navigation and container props, so it is ' +
+      `unclear if it should own its own state. Remove props: "${keys.join(
+        ', '
+      )}" ` +
+      'if the navigator should get its state from the navigation prop. If the ' +
+      'navigator should maintain its own state, do not pass a navigation prop.'
+    );
+  }
+}
+
 /**
  * Create an HOC that injects the navigation and manages the navigation state
  * in case it's not passed from above.
@@ -23,7 +48,7 @@ export default function createNavigationContainer(Component) {
     constructor(props) {
       super(props);
 
-      this._validateProps(props);
+      validateProps(props);
 
       this._initialAction = NavigationActions.init();
 
@@ -127,12 +152,12 @@ export default function createNavigationContainer(Component) {
       }
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //   this._validateProps(nextProps);
-    // }
+    static getDerivedStateFromProps(nextProps, prevState) {
+      validateProps(nextProps);
+      return null;
+    }
 
     componentDidUpdate(prevProps, prevState) {
-      this._validateProps(this.props);
       // Clear cached _nav every tick
       if (this._nav === this.state.nav) {
         this._nav = null;
